@@ -1,6 +1,7 @@
 'use strict'
 const AWS = require('aws-sdk');
 const { v4: uuidv4 } = require('uuid');
+const httpResponse = require('../httpResponse')
 
 module.exports.handle = async (event) => {
     const body = JSON.parse(event.body)
@@ -36,16 +37,16 @@ module.exports.handle = async (event) => {
         };
         await dynamoDB.put(putParams).promise();
 
-        return {
-            statusCode: 201,
-            body: JSON.stringify({ message: "Item created successfully", putParams})
-        };
+        httpResponse.status = 201
+        httpResponse.message =  "Item created successfully", putParams
+
+        return httpResponse
 
     } catch (error) {
-        return {
-            statusCode: 404,
-            body: JSON.stringify(error.message)
-        }
+        httpResponse.status = 404
+        httpResponse.message = error.message
+        
+        return httpResponse
 
     }
 };

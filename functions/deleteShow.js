@@ -1,13 +1,11 @@
 'use strict'
 const AWS = require('aws-sdk');
-const expressionGenerator = require('../expressionGenerator');
+const httpResponse = require('../httpResponse')
 
 
 module.exports.handle = async (event) => {
     const id = event.pathParameters.id
     const dynamoDB = new AWS.DynamoDB.DocumentClient()
-    
- 
 
     try {
         const putParams = {
@@ -16,18 +14,18 @@ module.exports.handle = async (event) => {
                 primary_key: id,
             }
         };
-        await dynamoDB.delete(putParams).promise();
+       const query = await dynamoDB.delete(putParams).promise();
 
-        return {
-            statusCode: 201,
-            body: JSON.stringify({message: "Item deleted successfully", putParams})
-        };
-
+        httpResponse.status = 201
+        httpResponse.message = "Item deleted successfully"
+        
+        return httpResponse
+        
     } catch (error) {
-        return {
-            statusCode: 404,
-            body: JSON.stringify(error.message)
-        }
+        httpResponse.status = 404
+        httpResponse.message = error.message
+
+        return httpResponse
 
     }
 };

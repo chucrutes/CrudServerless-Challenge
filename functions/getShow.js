@@ -1,7 +1,7 @@
 "use strict";
 
 const AWS = require('aws-sdk');
-const httpResponse = require('../httpResponse')
+const httpResponse = require('../httpResponse');
 
 module.exports.handle = async (_) => {
 
@@ -28,8 +28,8 @@ module.exports.handle = async (_) => {
 
   }
   httpResponse.status = 200
-  httpResponse.message = {count: result.Count, items: item}
-
+  httpResponse.message = result.Count, item
+  
   return httpResponse
 
 };
