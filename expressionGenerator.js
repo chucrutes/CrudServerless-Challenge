@@ -1,4 +1,4 @@
-const fieldsToUpdate = (body, showdate) => {
+const fieldsToUpdate = (body) => {
     var fields = ['name', 'description', 'showDate']
     var fieldsToUpdate = []
     var expressions = []
@@ -14,7 +14,11 @@ const fieldsToUpdate = (body, showdate) => {
         var updateExpressionString = 'set'
 
         for (let index = 0; index < fieldsToUpdate.length; index++) {
-            updateExpressionString = updateExpressionString.concat(' #old' + fieldsToUpdate[index].toUpperCase() + ' = :new' + fieldsToUpdate[index].toUpperCase())
+            if (index == fieldsToUpdate.length - 1) {
+                updateExpressionString = updateExpressionString.concat(' #old' + fieldsToUpdate[index].toUpperCase() + ' = :new' + fieldsToUpdate[index].toUpperCase())
+            } else {
+                updateExpressionString = updateExpressionString.concat(' #old' + fieldsToUpdate[index].toUpperCase() + ' = :new' + fieldsToUpdate[index].toUpperCase() + ',')
+            }
         }
         return updateExpressionString
     }
@@ -28,22 +32,19 @@ const fieldsToUpdate = (body, showdate) => {
         }
         return expressionAttributeNames
     }
-    
+
     expressions.push(generateExpressionAttributeNames())
     const generateExpressionAttributeValues = () => {
         var expressionAttributeValues = {}
-        
+
         for (let index = 0; index < fieldsToUpdate.length; index++) {
-            if(bodyFields[index] == 'showDate'){
-                expressionAttributeValues[':new' + fieldsToUpdate[index].toUpperCase()] = showdate
-                
-            }
             expressionAttributeValues[':new' + fieldsToUpdate[index].toUpperCase()] = fieldsToUpdate[index]
+
         }
         return expressionAttributeValues
     }
     expressions.push(generateExpressionAttributeValues())
-    
+
     return expressions
 
 }
