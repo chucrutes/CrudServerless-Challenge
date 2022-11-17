@@ -38,7 +38,7 @@ module.exports.handle = async (event) => {
 
         return {
             statusCode: 201,
-            body: JSON.stringify({ putParams})
+            body: JSON.stringify({ message: "Item created successfully", putParams})
         };
 
     } catch (error) {
