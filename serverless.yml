@@ -21,7 +21,6 @@ provider:
             - 'dynamodb:DeleteItem'
           Resource: arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/${self:service}-ShowTable-${sls:stage}
 
-
 resources:
   Resources:
     ShowTable:

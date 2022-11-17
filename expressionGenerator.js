@@ -38,7 +38,7 @@ const fieldsToUpdate = (body) => {
         var expressionAttributeValues = {}
 
         for (let index = 0; index < fieldsToUpdate.length; index++) {
-            expressionAttributeValues[':new' + fieldsToUpdate[index].toUpperCase()] = fieldsToUpdate[index]
+            expressionAttributeValues[':new' + fieldsToUpdate[index].toUpperCase()] = body[fieldsToUpdate[index]]
 
         }
         return expressionAttributeValues
