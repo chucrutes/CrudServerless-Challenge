@@ -58,7 +58,7 @@ functions:
           path: /show/update/{id}
           method: put
   deleteShow:
-    handler: functions/updateShow.handle
+    handler: functions/deleteShow.handle
     events:
       - httpApi:
           path: /show/delete/{id}
