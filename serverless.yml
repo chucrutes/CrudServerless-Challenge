@@ -1,0 +1,71 @@
+org: tmelo387
+app: shows
+service: shows-crud
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: us-east-1
+  environment:
+    DYNAMODB_SHOW_TABLE: ${self:service}-ShowTable-${sls:stage}
+  iam:
+    role:
+      statements:
+        - Effect: 'Allow'
+          Action:
+            - 'dynamodb:PutItem'
+            - 'dynamodb:Get*'
+            - 'dynamodb:Scan*'
+            - 'dynamodb:UpdateItem'
+            - 'dynamodb:DeleteItem'
+          Resource: arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/${self:service}-ShowTable-${sls:stage}
+
+
+resources:
+  Resources:
+    ShowTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: primary_key
+            AttributeType: S
+        BillingMode: PAY_PER_REQUEST
+        KeySchema:
+          - AttributeName: primary_key
+            KeyType: HASH
+        TableName: ${self:service}-ShowTable-${sls:stage}
+
+functions:
+  createShow:
+    handler: functions/createShow.handle
+    events:
+      - httpApi:
+          path: /show/new
+          method: post
+    layers:
+      - { Ref: NodeModulesLambdaLayer }
+  getShows:
+    handler: functions/getShows.handle
+    events:
+      - httpApi:
+          path: /shows
+          method: get
+  updateShow:
+    handler: functions/updateShow.handle
+    events:
+      - httpApi:
+          path: /show/update/{id}
+          method: put
+  deleteShow:
+    handler: functions/updateShow.handle
+    events:
+      - httpApi:
+          path: /show/delete/{id}
+          method: delete
+
+layers:
+  NodeModules:
+    path: layer
+    compatibleRuntimes:
+      - nodejs14.x
