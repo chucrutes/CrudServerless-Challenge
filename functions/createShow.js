@@ -37,13 +37,13 @@ module.exports.handle = async (event) => {
         };
         await dynamoDB.put(putParams).promise();
 
-        httpResponse.status = 201
+        httpResponse.statusCode = 201
         httpResponse.message =  "Item created successfully", putParams
 
         return httpResponse
 
     } catch (error) {
-        httpResponse.status = 404
+        httpResponse.statusCode = 404
         httpResponse.message = error.message
         
         return httpResponse

@@ -14,15 +14,15 @@ module.exports.handle = async (event) => {
                 primary_key: id,
             }
         };
-       const query = await dynamoDB.delete(putParams).promise();
+        const query = await dynamoDB.delete(putParams).promise();
 
-        httpResponse.status = 201
+        httpResponse.statusCode = 201
         httpResponse.message = "Item deleted successfully"
-        
+
         return httpResponse
-        
+
     } catch (error) {
-        httpResponse.status = 404
+        httpResponse.statusCode = 404
         httpResponse.message = error.message
 
         return httpResponse

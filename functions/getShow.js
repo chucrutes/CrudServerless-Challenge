@@ -27,9 +27,9 @@ module.exports.handle = async (_) => {
     })
 
   }
-  httpResponse.status = 200
+  httpResponse.statusCode = 200
   httpResponse.message = result.Count, item
-  
+
   return httpResponse
 
 };

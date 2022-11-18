@@ -1,5 +1,5 @@
 const response = {
-    status: Number,
+    statusCode: Number,
     message: Object
 }
 
