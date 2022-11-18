@@ -1,6 +1,7 @@
 'use strict'
 const AWS = require('aws-sdk');
 const expressionGenerator = require('../expressionGenerator');
+const httpResponse = require('../httpResponse')
 
 
 module.exports.handle = async (event) => {
@@ -39,15 +40,15 @@ module.exports.handle = async (event) => {
         };
         await dynamoDB.update(putParams).promise();
 
-        return {
-            statusCode: 201,
-            body: JSON.stringify({ message: "Item updated successfully", putParams})
-        };
+        httpResponse.statusCode = 201
+        httpResponse.body =  JSON.stringify({message: "Item updated successfully", putParams})
+
+        return httpResponse
 
     } catch (error) {
         return {
-            statusCode: 404,
-            body: JSON.stringify({error: error.message, body })
+            statusCode: 400,
+            body: JSON.stringify({error: error.message})
         }
 
     }

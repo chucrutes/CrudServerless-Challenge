@@ -7,8 +7,8 @@ module.exports.handle = async (event) => {
     const body = JSON.parse(event.body)
     const dynamoDB = new AWS.DynamoDB.DocumentClient()
 
-    const requiredFields = ['name', 'date']
-    const showDate = new Date(body.date)
+    const requiredFields = ['name', 'showDate']
+    const showDate = new Date(body.showDate)
     const currentDate = new Date()
 
     try {
@@ -38,13 +38,13 @@ module.exports.handle = async (event) => {
         await dynamoDB.put(putParams).promise();
 
         httpResponse.statusCode = 201
-        httpResponse.message =  "Item created successfully", putParams
+        httpResponse.body =  JSON.stringify({message: "Item created successfully", putParams })
 
         return httpResponse
 
     } catch (error) {
-        httpResponse.statusCode = 404
-        httpResponse.message = error.message
+        httpResponse.statusCode = 400
+        httpResponse.body =  JSON.stringify({error: error.message })
         
         return httpResponse
 

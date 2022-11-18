@@ -1,6 +1,6 @@
 const response = {
     statusCode: Number,
-    message: Object
+    body: String
 }
 
 module.exports = response

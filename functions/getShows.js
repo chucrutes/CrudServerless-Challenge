@@ -28,7 +28,7 @@ module.exports.handle = async (_) => {
 
   }
   httpResponse.statusCode = 200
-  httpResponse.message = { count: result.Count, items: item }
+  httpResponse.body =  JSON.stringify({ count: result.Count, items: item })
 
   return httpResponse
 
