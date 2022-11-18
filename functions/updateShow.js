@@ -40,7 +40,7 @@ module.exports.handle = async (event) => {
         };
         await dynamoDB.update(putParams).promise();
 
-        httpResponse.statusCode = 201
+        httpResponse.statusCode = 202
         httpResponse.body =  JSON.stringify({message: "Item updated successfully", putParams})
 
         return httpResponse

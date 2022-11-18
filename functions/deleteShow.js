@@ -16,7 +16,7 @@ module.exports.handle = async (event) => {
         };
         await dynamoDB.delete(putParams).promise();
 
-        httpResponse.statusCode = 201
+        httpResponse.statusCode = 202
         httpResponse.body = JSON.stringify({ message: "Item deleted successfully", putParams })
 
         return httpResponse
