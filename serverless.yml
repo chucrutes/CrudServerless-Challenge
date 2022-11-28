@@ -47,6 +47,8 @@ functions:
       - httpApi:
           path: /show/new
           method: post
+          authorizer:
+            name: customAuthorizer
     layers:
       - { Ref: NodeModulesLambdaLayer }
   getShows:
