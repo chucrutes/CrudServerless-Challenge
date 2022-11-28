@@ -9,6 +9,11 @@ provider:
   region: us-east-1
   environment:
     DYNAMODB_SHOW_TABLE: ${self:service}-ShowTable-${sls:stage}
+  httpApi:
+    authorizers:
+      customAuthorizer:
+        type: request
+        functionArn: arn:aws:lambda:${aws:region}:${aws:accountId}:function:shows-auth-dev-authorizeMiddleware
   iam:
     role:
       statements:
@@ -62,6 +67,8 @@ functions:
       - httpApi:
           path: /show/delete/{id}
           method: delete
+          authorizer:
+            name: customAuthorizer
 
 layers:
   NodeModules:
