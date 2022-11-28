@@ -55,12 +55,16 @@ functions:
       - httpApi:
           path: /shows
           method: get
+          authorizer:
+            name: customAuthorizer
   updateShow:
     handler: functions/updateShow.handle
     events:
       - httpApi:
           path: /show/update/{id}
           method: put
+          authorizer:
+            name: customAuthorizer
   deleteShow:
     handler: functions/deleteShow.handle
     events:
