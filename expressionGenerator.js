@@ -1,4 +1,3 @@
-
 function generateUpdateExpression(fields){
     var updateExpressionString = 'set'
 
@@ -32,20 +31,19 @@ function generateExpressionAttributeValues(fields, body) {
 }
 
 function fieldsToUpdate(body) {
-    var tableFields = ['name', 'description', 'showDate']
-    var fieldsToBeUpdated = []
+    const tableFields = ['name', 'description', 'showDate']
     const bodyFields = Object.keys(body)
-
-    for (let index = 0; index < bodyFields.length; index++) {
-        if (tableFields.includes(bodyFields[index])) {
-            fieldsToBeUpdated.push(bodyFields[index])
-        }
-    }
-
+    
+    const fieldsToBeUpdated = bodyFields.filter((field) => tableFields.includes(field))
+    
     return fieldsToBeUpdated
 }
 
 function expressionGenerator(body){
+    body = {
+        name: 'teste',
+        description: 'asdasdasdda'
+    }
     const fieldsToBeUpdated = fieldsToUpdate(body) 
     const updateExpression = generateUpdateExpression(fieldsToBeUpdated)
     const expressionAttributeNames = generateExpressionAttributeNames(fieldsToBeUpdated)
@@ -60,4 +58,5 @@ function expressionGenerator(body){
 
 
 }
+console.log(expressionGenerator("csaasdas"))
 module.exports = expressionGenerator

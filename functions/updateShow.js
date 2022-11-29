@@ -1,33 +1,20 @@
 'use strict'
 const AWS = require('aws-sdk');
+const dateValidator = require('../dateValidator');
 const expressionGenerator = require('../expressionGenerator');
-const httpResponse = require('../httpResponse')
+const httpResponse = require('../httpResponse');
+const verifyRequiredFields = require('../requiredFields');
 
 
 module.exports.handle = async (event) => {
     const dynamoDB = new AWS.DynamoDB.DocumentClient()
-
     const body = JSON.parse(event.body)
     const id = event.pathParameters.id
     
-    const requiredFields = ['name', 'showDate']
-    var expressions = expressionGenerator(body)
-    
     try {
-        if(body.showDate != undefined){
-            const showDate = new Date(body.showDate)
-            const currentDate = new Date()        
-            if (showDate == 'Invalid Date' || showDate.getTime() < currentDate.getTime()) {
-                throw new Error('Invalid Date')
-            }
-
-        }
-
-        for (let index = 0; index < requiredFields.length; index++) {
-            if (body[requiredFields[index]] == '') {
-                throw new Error(`Required field ${requiredFields[index]} was not filled`)
-            }
-        }
+        
+        dateValidator(body.showDate)
+        verifyRequiredFields(body)
 
         const expression = expressionGenerator(body)
 

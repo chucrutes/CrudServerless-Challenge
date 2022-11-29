@@ -1,28 +1,18 @@
 'use strict'
 const AWS = require('aws-sdk');
 const { v4: uuidv4 } = require('uuid');
-const httpResponse = require('../httpResponse')
+const httpResponse = require('../httpResponse');
+const dateValidator = require('../dateValidator');
+const verifyRequiredFields = require('../requiredFields');
 
 module.exports.handle = async (event) => {
     const body = JSON.parse(event.body)
     const dynamoDB = new AWS.DynamoDB.DocumentClient()
 
-    const requiredFields = ['name', 'showDate']
-    const showDate = new Date(body.showDate)
-    const currentDate = new Date()
-
     try {
-
-        if (showDate == 'Invalid Date' || showDate.getTime() < currentDate.getTime()) {
-            throw new Error('Invalid Date')
-        }
-
-        for (let index = 0; index < requiredFields.length; index++) {
-            if (body[requiredFields[index]] == '' || body[requiredFields[index]] == undefined) {
-                throw new Error(`Required field ${requiredFields[index]} was not filled`)
-            }
-        }
-
+        const dateValidated = dateValidator(body.showDate)
+        verifyRequiredFields(body)
+        
         const putParams = {
             Item: {
                 primary_key: uuidv4(),
@@ -31,7 +21,7 @@ module.exports.handle = async (event) => {
                 createdAt: new Date().toLocaleString("pt-BR", {
                     timeZone: "America/Sao_Paulo",
                   }),
-                showDate: showDate.toLocaleString()
+                showDate: dateValidated.toLocaleString()
             },
             TableName: process.env.DYNAMODB_SHOW_TABLE
         };
