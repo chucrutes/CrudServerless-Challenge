@@ -1,51 +1,63 @@
-const fieldsToUpdate = (body) => {
-    var fields = ['name', 'description', 'showDate']
-    var fieldsToUpdate = []
-    var expressions = []
-    const bodyFields = Object.keys(body)
 
-    for (let index = 0; index < bodyFields.length; index++) {
-        if (fields.includes(bodyFields[index])) {
-            fieldsToUpdate.push(bodyFields[index])
+function generateUpdateExpression(fields){
+    var updateExpressionString = 'set'
+
+    for (let index = 0; index < fields.length; index++) {
+        if (index == fields.length - 1) {
+            updateExpressionString = updateExpressionString.concat(' #old' + fields[index].toUpperCase() + ' = :new' + fields[index].toUpperCase())
+        } else {
+            updateExpressionString = updateExpressionString.concat(' #old' + fields[index].toUpperCase() + ' = :new' + fields[index].toUpperCase() + ',')
         }
     }
+    return updateExpressionString
+}
 
-    const generateUpdateExpression = () => {
-        var updateExpressionString = 'set'
+function generateExpressionAttributeNames(fields) {
+    var expressionAttributeNames = {}
 
-        for (let index = 0; index < fieldsToUpdate.length; index++) {
-            if (index == fieldsToUpdate.length - 1) {
-                updateExpressionString = updateExpressionString.concat(' #old' + fieldsToUpdate[index].toUpperCase() + ' = :new' + fieldsToUpdate[index].toUpperCase())
-            } else {
-                updateExpressionString = updateExpressionString.concat(' #old' + fieldsToUpdate[index].toUpperCase() + ' = :new' + fieldsToUpdate[index].toUpperCase() + ',')
-            }
-        }
-        return updateExpressionString
+    for (let index = 0; index < fields.length; index++) {
+        expressionAttributeNames['#old' + fields[index].toUpperCase()] = fields[index]
     }
-    expressions.push(generateUpdateExpression())
+    return expressionAttributeNames
+}
 
-    const generateExpressionAttributeNames = () => {
-        var expressionAttributeNames = {}
+function generateExpressionAttributeValues(fields, body) {
+    var expressionAttributeValues = {}
 
-        for (let index = 0; index < fieldsToUpdate.length; index++) {
-            expressionAttributeNames['#old' + fieldsToUpdate[index].toUpperCase()] = fieldsToUpdate[index]
-        }
-        return expressionAttributeNames
-    }
-
-    expressions.push(generateExpressionAttributeNames())
-    const generateExpressionAttributeValues = () => {
-        var expressionAttributeValues = {}
-
-        for (let index = 0; index < fieldsToUpdate.length; index++) {
-            expressionAttributeValues[':new' + fieldsToUpdate[index].toUpperCase()] = body[fieldsToUpdate[index]]
+        for (let index = 0; index < fields.length; index++) {
+            expressionAttributeValues[':new' + fields[index].toUpperCase()] = body[fields[index]]
 
         }
         return expressionAttributeValues
-    }
-    expressions.push(generateExpressionAttributeValues())
+}
 
-    return expressions
+function fieldsToUpdate(body) {
+    var tableFields = ['name', 'description', 'showDate']
+    var fieldsToBeUpdated = []
+    const bodyFields = Object.keys(body)
+
+    for (let index = 0; index < bodyFields.length; index++) {
+        if (tableFields.includes(bodyFields[index])) {
+            fieldsToBeUpdated.push(bodyFields[index])
+        }
+    }
+
+    return fieldsToBeUpdated
+}
+
+function expressionGenerator(body){
+    const fieldsToBeUpdated = fieldsToUpdate(body) 
+    const updateExpression = generateUpdateExpression(fieldsToBeUpdated)
+    const expressionAttributeNames = generateExpressionAttributeNames(fieldsToBeUpdated)
+    const expressionAttributeValues = generateExpressionAttributeValues(fieldsToBeUpdated, body);
+
+    return {
+        updateExpression,
+        expressionAttributeNames,
+        expressionAttributeValues
+    }
+
+
 
 }
-module.exports = fieldsToUpdate
+module.exports = expressionGenerator

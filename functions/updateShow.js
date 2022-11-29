@@ -29,14 +29,16 @@ module.exports.handle = async (event) => {
             }
         }
 
+        const expression = expressionGenerator(body)
+
         const putParams = {
             TableName: process.env.DYNAMODB_SHOW_TABLE,
             Key: {
                 primary_key: id,
             },
-            UpdateExpression: expressions[0],
-            ExpressionAttributeNames: expressions[1],
-            ExpressionAttributeValues: expressions[2]
+            UpdateExpression: expression.updateExpression,
+            ExpressionAttributeNames: expression.expressionAttributeNames,
+            ExpressionAttributeValues: expression.expressionAttributeValues
         };
         await dynamoDB.update(putParams).promise();
 
