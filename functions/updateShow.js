@@ -10,13 +10,14 @@ module.exports.handle = async (event) => {
     const dynamoDB = new AWS.DynamoDB.DocumentClient()
     const body = JSON.parse(event.body)
     const id = event.pathParameters.id
+    const tableFields = ['name', 'description', 'showDate']
     
     try {
         
         dateValidator(body.showDate)
         verifyRequiredFields(body)
 
-        const expression = expressionGenerator(body)
+        const expression = expressionGenerator(body, tableFields)
 
         const putParams = {
             TableName: process.env.DYNAMODB_SHOW_TABLE,

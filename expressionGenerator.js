@@ -4,12 +4,9 @@ function generateUpdateExpression(fields) {
     for (let index = 0; index < fields.length; index++) {
 
         updateExpressionString = updateExpressionString.concat(' #old' + fields[index].toUpperCase() + ' = :new' + fields[index].toUpperCase() + ',')
-
-        if (index == fields.length - 1) {
-            updateExpressionString = updateExpressionString.concat(' #old' + fields[index].toUpperCase() + ' = :new' + fields[index].toUpperCase())
-        }
-
     }
+
+    updateExpressionString = updateExpressionString.substring(0, updateExpressionString.length - 1);
     return updateExpressionString
 }
 
@@ -32,8 +29,8 @@ function generateExpressionAttributeValues(fields, body) {
     return expressionAttributeValues
 }
 
-function fieldsToUpdate(body) {
-    const tableFields = ['name', 'description', 'showDate']
+function fieldsToUpdate(body, tableFields) {
+
     const bodyFields = Object.keys(body)
 
     const fieldsToBeUpdated = bodyFields.filter((field) => tableFields.includes(field))
@@ -41,14 +38,9 @@ function fieldsToUpdate(body) {
     return fieldsToBeUpdated
 }
 
-function expressionGenerator(body) {
-    body = {
-        name: 'teste',
-        description: 'asdasdasdda',
-        showDate: '12/31/2022'
-    }
+function expressionGenerator(body, tableFields) {
 
-    const fieldsToBeUpdated = fieldsToUpdate(body)
+    const fieldsToBeUpdated = fieldsToUpdate(body, tableFields)
     const updateExpression = generateUpdateExpression(fieldsToBeUpdated)
     const expressionAttributeNames = generateExpressionAttributeNames(fieldsToBeUpdated)
     const expressionAttributeValues = generateExpressionAttributeValues(fieldsToBeUpdated, body);
@@ -62,5 +54,4 @@ function expressionGenerator(body) {
 
 
 }
-
 module.exports = expressionGenerator
