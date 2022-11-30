@@ -1,6 +1,6 @@
 'use strict'
 const AWS = require('aws-sdk');
-const httpResponse = require('../httpResponse')
+const httpResponse = require('../utils/httpResponse')
 
 
 module.exports.handle = async (event) => {

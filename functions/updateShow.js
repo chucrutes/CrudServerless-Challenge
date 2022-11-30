@@ -1,9 +1,9 @@
 'use strict'
 const AWS = require('aws-sdk');
-const dateValidator = require('../dateValidator');
-const expressionGenerator = require('../expressionGenerator');
-const httpResponse = require('../httpResponse');
-const verifyRequiredFields = require('../requiredFields');
+const dateValidator = require('../utils/dateValidator');
+const expressionGenerator = require('../utils/expressionGenerator');
+const httpResponse = require('../utils/httpResponse');
+const verifyRequiredFields = require('../utils/requiredFields');
 
 
 module.exports.handle = async (event) => {

@@ -1,9 +1,9 @@
 'use strict'
 const AWS = require('aws-sdk');
 const { v4: uuidv4 } = require('uuid');
-const httpResponse = require('../httpResponse');
-const dateValidator = require('../dateValidator');
-const verifyRequiredFields = require('../requiredFields');
+const httpResponse = require('../utils/httpResponse');
+const dateValidator = require('../utils/dateValidator');
+const verifyRequiredFields = require('../utils/requiredFields');
 
 module.exports.handle = async (event) => {
     const body = JSON.parse(event.body)
