@@ -59,6 +59,8 @@ functions:
           method: get
           authorizer:
             name: customAuthorizer
+    layers:
+      - { Ref: NodeModulesLambdaLayer }
   updateShow:
     handler: functions/updateShow.handle
     events:
@@ -67,6 +69,8 @@ functions:
           method: put
           authorizer:
             name: customAuthorizer
+    layers:
+      - { Ref: NodeModulesLambdaLayer }
   deleteShow:
     handler: functions/deleteShow.handle
     events:
@@ -75,6 +79,8 @@ functions:
           method: delete
           authorizer:
             name: customAuthorizer
+    layers:
+      - { Ref: NodeModulesLambdaLayer }
 
 layers:
   NodeModules:

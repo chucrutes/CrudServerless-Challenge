@@ -1,7 +1,8 @@
 "use strict";
 
-const AWS = require('aws-sdk');
 const httpResponse = require('../utils/httpResponse');
+const {getAll} = require('../utils/dynamodb')
+
 
 module.exports.handle = async (_) => {
 
@@ -9,8 +10,7 @@ module.exports.handle = async (_) => {
     TableName: process.env.DYNAMODB_SHOW_TABLE
   }
 
-  const dynamodb = new AWS.DynamoDB.DocumentClient()
-  const result = await dynamodb.scan(scanParams).promise()
+  const result = await getAll(scanParams)
   var item;
 
   if (result.Count === 0) {

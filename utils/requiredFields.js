@@ -1,9 +1,12 @@
-function verifyRequiredFields(body){
-    const requiredFields = ['name', 'showDate']
+function verifyRequiredFields(body, requiredFields){
+    const bodyFields = Object.keys(body)
 
-    for (let index = 0; index < requiredFields.length; index++) {
-        if (body[requiredFields[index]] == '' || body[requiredFields[index]] == undefined) {
-            throw new Error(`Required field ${requiredFields[index]} was not filled`)
+    const fieldsToBeUpdated = bodyFields.filter((field) => requiredFields.includes(field))
+    
+
+    for (let index = 0; index < fieldsToBeUpdated.length; index++) {
+        if (body[fieldsToBeUpdated] == '' || body[fieldsToBeUpdated] == undefined) {
+            throw new Error(`Required field ${fieldsToBeUpdated[index]} was not filled`)
         }
     }
     return true

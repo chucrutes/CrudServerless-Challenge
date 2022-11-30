@@ -1,6 +1,8 @@
 'use strict'
-const AWS = require('aws-sdk');
-const httpResponse = require('../utils/httpResponse')
+
+const AWS = require('aws-sdk');const httpResponse = require('../utils/httpResponse')
+const {destroy} = require('../utils/dynamodb')
+
 
 
 module.exports.handle = async (event) => {
@@ -14,7 +16,8 @@ module.exports.handle = async (event) => {
                 primary_key: id,
             }
         };
-        await dynamoDB.delete(putParams).promise();
+        
+       destroy(putParams)
 
         httpResponse.statusCode = 202
         httpResponse.body = JSON.stringify({ message: "Item deleted successfully", putParams })

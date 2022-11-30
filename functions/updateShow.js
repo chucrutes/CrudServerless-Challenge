@@ -1,21 +1,22 @@
 'use strict'
-const AWS = require('aws-sdk');
 const dateValidator = require('../utils/dateValidator');
 const expressionGenerator = require('../utils/expressionGenerator');
 const httpResponse = require('../utils/httpResponse');
 const verifyRequiredFields = require('../utils/requiredFields');
+const {update} = require('../utils/dynamodb')
+
 
 
 module.exports.handle = async (event) => {
-    const dynamoDB = new AWS.DynamoDB.DocumentClient()
     const body = JSON.parse(event.body)
     const id = event.pathParameters.id
     const tableFields = ['name', 'description', 'showDate']
+    const requiredFields = ['name', 'showDate']
     
     try {
         
         dateValidator(body.showDate)
-        verifyRequiredFields(body)
+        verifyRequiredFields(body, requiredFields)
 
         const expression = expressionGenerator(body, tableFields)
 
@@ -28,7 +29,7 @@ module.exports.handle = async (event) => {
             ExpressionAttributeNames: expression.expressionAttributeNames,
             ExpressionAttributeValues: expression.expressionAttributeValues
         };
-        await dynamoDB.update(putParams).promise();
+        await update(putParams)
 
         httpResponse.statusCode = 202
         httpResponse.body =  JSON.stringify({message: "Item updated successfully", putParams})
