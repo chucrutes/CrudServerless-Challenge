@@ -19,7 +19,6 @@ module.exports.handle = async (event) => {
         
        const {Attributes} = await destroy(putParams)
        
-       console.log(Attributes)
        if(Attributes == undefined){
         throw new Error('Item not found')
        }
