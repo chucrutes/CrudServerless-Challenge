@@ -1,8 +1,6 @@
 function verifyRequiredFields(body, requiredFields){
     const bodyFields = Object.keys(body)
-
-    const fieldsToBeUpdated = bodyFields.filter((field) => requiredFields.includes(field))
-    
+    const fieldsToBeUpdated = bodyFields.filter((field) => requiredFields.includes(field))    
 
     for (let index = 0; index < fieldsToBeUpdated.length; index++) {
         if (body[fieldsToBeUpdated] == '' || body[fieldsToBeUpdated] == undefined) {

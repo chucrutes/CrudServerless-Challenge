@@ -33,7 +33,9 @@ const save = async (params) => {
     return documentClient.send(new PutCommand(params))
 }
 
-const getItem = async (query) => documentClient.send(new QueryCommand(query));
+const getItem = async (query) => {
+    return documentClient.send(new QueryCommand(query));
+}
 
 const getAll = async (params) => {
     return documentClient.send(new ScanCommand(params));
@@ -47,4 +49,9 @@ const destroy = async (params) => {
     return documentClient.send(new DeleteCommand(params));
 };
 
-module.exports = { save, update, getAll, destroy }
+const existsBy = async (params) => {
+    const result = await documentClient.send(new QueryCommand(params));
+    return result.Count > 0;
+};
+
+module.exports = { getItem, getAll, destroy, update, save }

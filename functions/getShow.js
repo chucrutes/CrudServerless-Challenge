@@ -1,11 +1,10 @@
 "use strict";
 
 const httpResponse = require('../utils/httpResponse');
-const {getAll} = require('../utils/dynamodb')
+const { getAll } = require('../utils/dynamodb')
 
 
 module.exports.handle = async (_) => {
-
   const scanParams = {
     TableName: process.env.DYNAMODB_SHOW_TABLE
   }

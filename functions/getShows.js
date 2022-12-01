@@ -4,7 +4,6 @@ const { getAll } = require('../utils/dynamodb');
 const httpResponse = require('../utils/httpResponse')
 
 module.exports.handle = async (_) => {
-
     const scanParams = {
       TableName: process.env.DYNAMODB_SHOW_TABLE
     }

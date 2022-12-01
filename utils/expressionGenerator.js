@@ -30,16 +30,13 @@ function generateExpressionAttributeValues(fields, body) {
 }
 
 function fieldsToUpdate(body, tableFields) {
-
     const bodyFields = Object.keys(body)
-
     const fieldsToBeUpdated = bodyFields.filter((field) => tableFields.includes(field))
 
     return fieldsToBeUpdated
 }
 
 function expressionGenerator(body, tableFields) {
-
     const fieldsToBeUpdated = fieldsToUpdate(body, tableFields)
     const updateExpression = generateUpdateExpression(fieldsToBeUpdated)
     const expressionAttributeNames = generateExpressionAttributeNames(fieldsToBeUpdated)
@@ -50,8 +47,5 @@ function expressionGenerator(body, tableFields) {
         expressionAttributeNames,
         expressionAttributeValues
     }
-
-
-
 }
 module.exports = expressionGenerator

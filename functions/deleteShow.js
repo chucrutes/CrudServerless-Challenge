@@ -1,23 +1,28 @@
 'use strict'
 
-const AWS = require('aws-sdk');const httpResponse = require('../utils/httpResponse')
-const {destroy} = require('../utils/dynamodb')
+const httpResponse = require('../utils/httpResponse');
+const {destroy} = require('../utils/dynamodb');
 
 
 
 module.exports.handle = async (event) => {
-    const id = event.pathParameters.id
-    const dynamoDB = new AWS.DynamoDB.DocumentClient()
+    const {id} = event.pathParameters
 
     try {
         const putParams = {
             TableName: process.env.DYNAMODB_SHOW_TABLE,
             Key: {
                 primary_key: id,
-            }
+            },
+            ReturnValues: "ALL_OLD"
         };
         
-       destroy(putParams)
+       const {Attributes} = await destroy(putParams)
+       
+       console.log(Attributes)
+       if(Attributes == undefined){
+        throw new Error('Item not found')
+       }
 
         httpResponse.statusCode = 202
         httpResponse.body = JSON.stringify({ message: "Item deleted successfully", putParams })
