@@ -7,11 +7,12 @@ const {save} = require('../utils/dynamodb')
 
 module.exports.handle = async (event) => {
     const body = JSON.parse(event.body)
-    const requiredFields = ['name', 'description', 'tickets', 'showDate']
+    console.log(body)
 
     try {
         const dateValidated = dateValidator(body.showDate)
-        verifyRequiredFields(body)
+        const requiredFields = ['name', 'description', 'tickets', 'showDate']
+        verifyRequiredFields(body, requiredFields)
         
         const putParams = {
             Item: {
