@@ -9,6 +9,7 @@ provider:
   region: us-east-1
   environment:
     DYNAMODB_SHOW_TABLE: ${self:service}-ShowTable-${sls:stage}
+    DYNAMODB_TICKETS_TABLE: ${self:service}-TicketsTable-${sls:stage}
   httpApi:
     authorizers:
       customAuthorizer:
@@ -40,6 +41,18 @@ resources:
             KeyType: HASH
         TableName: ${self:service}-ShowTable-${sls:stage}
 
+    TicketsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: primary_key
+            AttributeType: S
+        BillingMode: PAY_PER_REQUEST
+        KeySchema:
+          - AttributeName: primary_key
+            KeyType: HASH
+        TableName: ${self:provider.environment.DYNAMODB_TICKETS_TABLE}
+        
 functions:
   createShow:
     handler: functions/createShow.handle
@@ -59,6 +72,14 @@ functions:
           method: get
           authorizer:
             name: customAuthorizer
+    layers:
+      - { Ref: NodeModulesLambdaLayer }
+  buyTicket:
+    handler: functions/getShows.handle
+    events:
+      - httpApi:
+          path: /ticket
+          method: get
     layers:
       - { Ref: NodeModulesLambdaLayer }
   updateShow:

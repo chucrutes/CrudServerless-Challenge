@@ -7,6 +7,7 @@ const {save} = require('../utils/dynamodb')
 
 module.exports.handle = async (event) => {
     const body = JSON.parse(event.body)
+    const requiredFields = ['name', 'description', 'tickets', 'showDate']
 
     try {
         const dateValidated = dateValidator(body.showDate)
@@ -17,6 +18,8 @@ module.exports.handle = async (event) => {
                 primary_key: uuidv4(),
                 name: body.name,
                 description: body.description,
+                tickets: body.tickets,
+                ticketsLeft: body.tickets,
                 createdAt: new Date().toLocaleString("pt-BR", {
                     timeZone: "America/Sao_Paulo",
                   }),

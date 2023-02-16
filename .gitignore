@@ -1,5 +1,4 @@
 # package directories
-/layer/*
 jspm_packages
 
 # Serverless directories
